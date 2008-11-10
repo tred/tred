@@ -5,22 +5,26 @@ require 'rack'
 
 class App
   
-  def self.call(env); new(env).dispatch end
+  def self.desktops=(val)
+    @desktops = val
+  end
   
-  attr_reader :env
+  def self.desktops
+    @desktops || 6
+  end
+  
+  def self.call(env)
+    new(env).dispatch 
+  end
   
   def initialize(env)
     @env = env
   end
-    
-  def people
-    { 1 => 'Carl', 2 => 'Myles', 3 => 'Mike' }
-  end
   
-  def links
-    people.sort_by {|n| n}.map do |num,name|
-      %{<a href='/#{num}'>#{name} (#{num})</a>}
-    end.join(' | ')
+  def dispatch
+    switch($1) if desktops.include?(@env['PATH_INFO'][/\/(\d)$/,1].to_i)
+    body = links
+    [200,{'Content-type' => 'text/html','Content-length'=>body.size.to_s},body]
   end
   
   def switch(desktop_number)
@@ -29,16 +33,23 @@ class App
         keystroke "#{desktop_number}" using control down
       end tell
     }
-    #system %[osascript -e 'tell application "System Events" \n tell process "Finder" to keystroke "#{desktop_number}" using control down']
     system "osascript -e '#{script}'"
   end
   
-  def dispatch
-    switch($1) if env['PATH_INFO'] =~ /^\/(\d)$/
-    body = links
-    [200,{'Content-length'=>body.size.to_s},body]
+  def links
+    "Desktops: " <<
+    desktops.map do |num|
+      %{<a href='/#{num}'>#{num}</a>}
+    end.join(' | ')
+  end
+  
+  def desktops
+    (1..self.class.desktops)
   end
   
 end
 
+App.desktops = ARGV.first.to_i unless ARGV.empty?
+
+puts "running on 8080"
 Rack::Handler::Mongrel.run App
