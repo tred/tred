@@ -1,6 +1,7 @@
 class NewRouteMapper
   
-  def draw
+  def draw(&blk)
+    
   end
   
   def recognize(request)

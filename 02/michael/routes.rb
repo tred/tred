@@ -1,19 +1,29 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :users
   map.resource :user, :member => { :activate => :get }
+  
   map.with_options(:controller => "users") do |users|
-    users.login_or_register "login-or-register", :action => "new_with_login", :conditions => { :method => :get }
-    users.submit_your_project "submit-your-project", :action => "new_with_login", :type => "project", :conditions => { :method => :get }
-    users.nominate_a_staff_member "nominate-a-staff-member", :action => "new_with_login", :type => "staff", :conditions => { :method => :get }
-    users.register "register", :action => "new", :conditions => { :method => :get }
-    users.register "register", :action => "create", :conditions => { :method => :post }
-    users.register_thankyou "register/thankyou", :action => "thankyou", :conditions => { :method => :get }
-    users.members_path "members", :action => "members"
-    users.activate "a/:activation_code", :action => "activate", :activation_code => nil
-    users.forgot_password "login/forgot-password", :action => "forgot_password", :conditions => {:method => :get}
-    users.forgot_password "login/forgot-password", :action => "recall_password", :conditions => {:method => :post}
-    users.members "members", :action => "members"
+    map.with_options(:conditions => { :method => :get }) do |users|
+      users.login_or_register "login-or-register", :action => "new_with_login"
+      users.submit_your_project "submit-your-project", :action => "new_with_login", :type => "project"
+      users.nominate_a_staff_member "nominate-a-staff-member", :action => "new_with_login", :type => "staff"
+      users.register "register", :action => "new"
+      users.register_thankyou "register/thankyou", :action => "thankyou"
+      users.members_path "members", :action => "members"
+      users.activate "a/:activation_code", :action => "activate", :activation_code => nil
+      users.forgot_password "login/forgot-password", :action => "forgot_password"
+      users.forgot_password "login/forgot-password", :action => "recall_password"
+      users.members "members", :action => "members"
+    end
+    map.with_options(:conditions => { :method => :post }) do |users|
+      users.register "register", :action => "create"
+    end
   end
+
+  (map/{'users'=>:controller}).map do |user|
+    users
+  end
+  
 
   map.namespace :members do |members|
     members.resources :projects,
@@ -66,7 +76,25 @@ ActionController::Routing::Routes.draw do |map|
     sess.logout "logout", :action => "delete" , :conditions => { :method => :get }                                
     sess.logout "logout", :action => "destroy", :conditions => { :method => :post }
   end
-
+  
+  map.connect 'pages/:page' :controller => :pages, :action => :show
+  
+  class PageController
+    
+    # def show
+    #   render :action => params[:page].gsub('-','_')
+    # rescue RenderError
+    #   raise RouteError
+    # end
+    
+  end
+  
+  link_to page_sponsors_message_path
+  
+  link_to pages_path(:page => 'sponsors-message')
+  
+  link_to path/'sponsors-message'
+  
   map.with_options(:controller => "pages") do |pages|
     pages.sponsors_message          "sponors-message",         :action => "sponsors_message"
     pages.privacy_policy            "privacy-policy",          :action => "privacy_policy"
@@ -75,6 +103,12 @@ ActionController::Routing::Routes.draw do |map|
     pages.formatted_recent_activity "recent-activity.:format", :action => "recent_activity"
     pages.feeds                     "feeds",                   :action => "feeds"
     pages.hartnett                  "brendan-hartnett",        :action => "hartnett"
+  end
+  
+  map.connect "dasojd/:dklsd(dsakldj)"
+  
+  map.get.join({'pages' => :controller}).map do |map|
+    map/'sponsors_message' > 'sponsors_message'
   end
   
   map.with_options(:controller => "about") do |pages|
