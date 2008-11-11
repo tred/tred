@@ -27,8 +27,7 @@ end
 
 map = Chain.new
 
-map/'seg1'/:seg2/'seg3' >> :my_controller > :my_action;
-
+map/'seg1'/:seg2/'seg3' >> :my_controller > :my_action
 
 (map/'somepath').map do |somepath| 
   'bla'
