@@ -1,0 +1,20 @@
+companies:
+  index:  /         get
+  create: /         post
+  new:    /new      get
+  search: /search   post
+  show:   /:id      get
+  update: /:id      put
+  edit:   /:id/edit get
+
+accounts:
+  new: /new/plan/:plan_id get
+
+articles:
+  show: /:year/:month/:day/:slug  get
+  new_comment: /:year/:month/:day/:slug 
+
+particles: /specs
+  index
+  create
+  update
