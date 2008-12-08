@@ -71,16 +71,16 @@ new_routes do
   
   get/'user.js' >> :users > :find_or_create
 
-  with(match/:slug) do
+  with match/:slug do
     
     get >> :restaraunts > :show
     
-    with( (match/'order').controller(:orders) ) do
+    with match/'order' >> :orders do
       post > :create
       get > :show
     end
     
-    get/{'item_images' => :controller}/{/.+/ => :image} > :show
+    get /{'item_images' => :controller}/{/.+/ => :image} > :show
     
   end
   

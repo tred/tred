@@ -1,16 +1,27 @@
 # using newrouter
 shiny do
+  
+  defaults do
+    put > :update
+    get > :show
+  end
     
-  get.root >> :menus > :fa_coffee
+  get /'' >> :menus > :fa_coffee
   
-  get/{'tests' => :controller}/:action
+  get /{'tests' => :controller}/:action
   
-  get/'user.js' >> :users > :find_or_create
+  get /'user.js' >> :users > :find_or_create
 
-  with(match/:slug) do
+  get /:slug         >> :restaraunts > :show
+  get /:slug/'menu'  >> :menus       > :show
+  get /:slug/'order' >> :orders
+
+  with match/:slug do
     
     get >> :restaraunts > :show
     get/'menu' >> :menus > :show
+    
+    match/'order' >> :orders
     
     with(match/'order' >> :orders) do
       put > :update

@@ -3,7 +3,7 @@
 #   # map.connect ':controller/:action/:id.:format'
 # end
 
-NewRoutes = NewRouteMapper.new
+# NewRoutes = NewRouteMapper.new
 
 NewRoutes.setup do
   

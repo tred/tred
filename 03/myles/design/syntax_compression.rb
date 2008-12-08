@@ -17,7 +17,8 @@ put.segment(':slug').segment('order').controller(:orders).action(:update)
 put.segment(:slug).segment('order').controller(:orders).action(:update)
 
 # now we can use some operators for the common methods: segment and action
-put/:slug/'order' >> :orders > :update
+put /:slug/'order' >> :orders > :update
 
 # if a segment matches the name of a controller you can put the controller inline
-put/:slug/{'items' => :controller} > :update
+put /:slug/'items_was_a_long_word' >> :items_was_a_long_word > :update
+put /:slug/{'items_was_a_long_word' => :controller} > :update
