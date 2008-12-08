@@ -100,21 +100,21 @@ ActionController::Routing::Routes.draw do |map|
   @map = map
   include SweetRoutes
   
-  #R get.c(:accounts).a('new/plan/:plan_id'=>:new).sign_up!
-  #
-  #R get.c(:plans).a('' => :index).plans!
-  #post.c(:accounts).with do |ac|
-  #  R ac.a('' => :create).accounts!
-  #  R ac.a('subdomain/:subdomain' => :subdomain).accounts_subdomain!
-  #end
+  get.c(:accounts).a('new/plan/:plan_id'=>:new).sign_up!
+  
+  get.c(:plans).a('' => :index).plans!
+  post.c(:accounts).with do |ac|
+    ac.a('' => :create).accounts!
+    ac.a('subdomain/:subdomain' => :subdomain).accounts_subdomain!
+  end
   get.c(:companies).with do |com|
-    #com.a('' => :index).companies!
-    #com.a(:new).new_company!
+    com.a('' => :index).companies!
+    com.a(:new).new_company!
     com.a(':id' => :show).company!
     com.a(':id/edit' => :edit).edit_company!
   end
-  #R post.c(:companies).a('' => :create).companies!
-  #R post.c(:companies).a(:search).search_for_company!
+  post.c(:companies).a('' => :create).companies!
+  post.c(:companies).a(:search).search_for_company!
   
   #map.with_options :controller => 'companies' do |companies|
   #  companies.with_options :conditions => {:method => :get} do |c|
@@ -130,7 +130,7 @@ ActionController::Routing::Routes.draw do |map|
   #  companies.company 'companies/:id', :action => 'update', :conditions => {:method => :put}
   #end
   
-  test.with_options :controller => 'people' do |people|
+  map.with_options :controller => 'people' do |people|
     people.with_options :conditions => {:method => :get} do |p|
       p.person 'people/:id', :action => 'show'
       p.edit_person 'people/:id/edit', :action => 'edit'
