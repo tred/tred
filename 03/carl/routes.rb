@@ -130,7 +130,7 @@ ActionController::Routing::Routes.draw do |map|
   #  companies.company 'companies/:id', :action => 'update', :conditions => {:method => :put}
   #end
   
-  map.with_options :controller => 'people' do |people|
+  test.with_options :controller => 'people' do |people|
     people.with_options :conditions => {:method => :get} do |p|
       p.person 'people/:id', :action => 'show'
       p.edit_person 'people/:id/edit', :action => 'edit'
