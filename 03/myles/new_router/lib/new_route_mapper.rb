@@ -14,26 +14,27 @@ class RequestMatcher
     @segments = []
   end
 
-  def get; method(:get) end
-  def post; method(:post) end
-
+  # set the request method
   def method(name = nil)
     return @method unless name
     @method = name
     self
   end
   
+  def get; method(:get) end
+  def post; method(:post) end
+  
+  # a segment of the url
   def segment(seg)
     @segments << seg
     self
   end
   
-  def root
-    segment('')
-  end
-  
   alias_method :/, :segment
+  
+  def root; segment('') end
     
+  # the controller to route to
   def controller(name = nil)
     return @controller unless name
     @controller = name.to_s
@@ -42,6 +43,7 @@ class RequestMatcher
   
   alias_method :>>, :controller
   
+  # the action to route to
   def action(name = nil)
     return @action unless name
     @action = name.to_s
@@ -49,7 +51,9 @@ class RequestMatcher
   end
   
   alias_method :>, :action
-    
+  
+  # these are all called by router
+  
   def match(request)
     return unless 
       request.request_method == @method  &&
